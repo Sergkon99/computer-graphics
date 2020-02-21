@@ -1,5 +1,5 @@
 import unittest
-import on2d, on3d
+import src.on2d as on2d, src.on3d as on3d
 
 class TestGeom(unittest.TestCase):
 
