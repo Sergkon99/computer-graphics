@@ -129,4 +129,5 @@ class TestGeom(unittest.TestCase):
         print(ab.cross(ad).len())
 
 
-unittest.main()
+if __name__ == "__main__":
+    unittest.main()
