@@ -1,5 +1,6 @@
 import unittest
 import src.on2d as on2d, src.on3d as on3d
+import src.utils as utils
 
 class TestGeom(unittest.TestCase):
 
@@ -36,6 +37,50 @@ class TestGeom(unittest.TestCase):
 
         with self.assertRaises(on2d.LineNotExists):
             on2d.Line(a=0, b=0, c=1)
+
+    def test_intersect(self):
+        a = on2d.Point()
+        b = on2d.Point(x=3)
+        c = on2d.Point(x=2)
+        d = on2d.Point(x=4)
+        s = on2d.Segment(c, d)
+        r = on2d.Ray(a, b)
+        res = utils.intersects(s=s, r=r)
+        self.assertTrue(res)
+
+        r = on2d.Ray(b, a)
+        res = utils.intersects(s=s, r=r)
+        self.assertTrue(res)
+
+        c = on2d.Point(x=5)
+        d = on2d.Point(x=7)
+        s = on2d.Segment(a, b)
+        res = utils.intersects(s=s, r=r)
+        self.assertTrue(res)
+
+        a = on2d.Point(x=5)
+        b = on2d.Point(x=8)
+        c = on2d.Point()
+        d = on2d.Point(x=1)
+        s = on2d.Segment(c, d)
+        r = on2d.Ray(a, b)
+        res = utils.intersects(s=s, r=r)
+        self.assertFalse(res)
+
+        a = on2d.Point()
+        b = on2d.Point(x=3, y=3)
+        c = on2d.Point(x=5, y=5)
+        d = on2d.Point(x=7, y=7)
+        s = on2d.Segment(c, d)
+        r = on2d.Ray(a, b)
+        res = utils.intersects(s=s, r=r)
+        self.assertTrue(res)
+
+        c = on2d.Point(x=-3, y=-3)
+        d = on2d.Point(x=-5, y=-5)
+        s = on2d.Segment(c, d)
+        res = utils.intersects(s=s, r=r)
+        self.assertFalse(res)
 
     def test_angle(self):
         a = on3d.Point(x=2, y=0, z=-1)

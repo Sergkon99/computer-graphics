@@ -66,6 +66,7 @@ class Line():
         return f'{self.a}x + {self.b}y + {self.c} = 0'
 
     def position(self, line: 'Line') -> Position:
+        # вернет взамиорасполежение текущей прямой с переданной
         eps = 10**-3
         if abs(self.a*line.b - self.b*line.a) > eps:
             return Position.intersect
@@ -74,3 +75,21 @@ class Line():
             abs(self.a*line.c - self.c*line.a) < eps):
             return Position.match
         return Position.parallel
+
+    def belongs(self, p: Point):
+        return self.a*p.x + self.b*p.y + self.c == 0
+
+
+class Segment():
+    # отрезок [a, b]
+    def __init__(self, a: Point=Point(), b: Point=Point()):
+        self.a = a
+        self.b = b
+
+
+class Ray():
+    # луч вида [a, b)
+    def __init__(self, a: Point=Point(), b: Point=Point()):
+        self.a = a
+        self.b = b
+
