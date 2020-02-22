@@ -1,8 +1,5 @@
 from enum import Enum
-
-
-class LineNotExists(Exception):
-    pass
+from .exceptions import LineNotExists
 
 
 class Point():
@@ -53,14 +50,21 @@ class Position(Enum):
 
 class Line():
     # прямая вида ax + by + c = 0
-    def __init__(self, *, a, b, c):
+    def __init__(self, *, a: float=None, b: float=None, c: float=None):
         if a == 0 and b == 0:
             raise LineNotExists('a and b equal zero')
-        self.a = a
-        self.b = b
-        self.c = c
+        self.a = a or 0
+        self.b = b or 0
+        self.c = c or 0
         # вектор нормали
         self.n = Vector().from_coords(x=a, y=b)
+
+    def from_points(self, a: Point, b: Point):
+        self.n = Vector(a, b)
+        self.a = -self.n.y
+        self.b = self.n.x
+        self.c = -(self.a*a.x + self.b*a.y)
+        return self
 
     def __str__(self) -> str:
         return f'{self.a}x + {self.b}y + {self.c} = 0'
@@ -77,6 +81,7 @@ class Line():
         return Position.parallel
 
     def belongs(self, p: Point):
+        # проверит, принадлежит ли точка прямой
         return self.a*p.x + self.b*p.y + self.c == 0
 
 

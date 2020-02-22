@@ -1,0 +1,2 @@
+class LineNotExists(Exception):
+    pass
