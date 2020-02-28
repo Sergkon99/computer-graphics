@@ -85,6 +85,32 @@ class TestGeom(unittest.TestCase):
         res = intersects(s=s, r=r)
         self.assertFalse(res)
 
+        a = Point2D(x=0, y=1)
+        b = Point2D(x=0, y=3)
+        c = Point2D(x=0, y=5)
+        d = Point2D(x=0, y=7)
+        r = Ray2D(a, b)
+        s = Segment2D(c, d)
+        res = intersects(s=s, r=r)
+        self.assertTrue(res)
+
+        r = Ray2D(c, d)
+        s = Segment2D(a, b)
+        res = intersects(s=s, r=r)
+        self.assertFalse(res)
+
+        b = Point2D(x=0, y=5)
+        r = Ray2D(c, d)
+        s = Segment2D(a, b)
+        res = intersects(s=s, r=r)
+        self.assertTrue(res)
+
+        b = Point2D(x=1, y=4)
+        r = Ray2D(c, d)
+        s = Segment2D(a, b)
+        with self.assertRaises(InputError):
+            res = intersects(s=s, r=r)
+
     def test_angle(self):
         a = Point3D(x=2, y=0, z=-1)
         b = Point3D(x=0, y=0, z=0)
