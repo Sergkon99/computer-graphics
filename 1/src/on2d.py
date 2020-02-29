@@ -5,8 +5,8 @@ from .exceptions import LineNotExists
 class Point():
     # точка с координатами (x, y)
     def __init__(self, *, x=0, y=0):
-        self.x: float = x
-        self.y: float = y
+        self.x: int = x
+        self.y: int = y
 
     def __str__(self) -> str:
         return f'({self.x},{self.y})'
@@ -50,7 +50,22 @@ class Position(Enum):
 
 class Line():
     # прямая вида ax + by + c = 0
-    def __init__(self, *, a: float=None, b: float=None, c: float=None):
+    def __init__(self, *, a: int=None, b: int=None, c: int=None):
+        if isinstance(a, int) and isinstance(b, int) and isinstance(c, int):
+            self.__from_coef(a, b, c)
+        elif isinstance(a, Point) and isinstance(b, Point):
+            self.__from_points(a, b)
+        else:
+            raise ValueError('Overload not exists')
+
+    def __from_points(self, a: Point, b: Point):
+        self.n = Vector(a, b)
+        self.a = -self.n.y
+        self.b = self.n.x
+        self.c = -(self.a*a.x + self.b*a.y)
+        # return self
+
+    def __from_coef(self, a, b, c):
         if a == 0 and b == 0:
             raise LineNotExists('a and b equal zero')
         self.a = a or 0
@@ -59,24 +74,16 @@ class Line():
         # вектор нормали
         self.n = Vector().from_coords(x=a, y=b)
 
-    def from_points(self, a: Point, b: Point):
-        self.n = Vector(a, b)
-        self.a = -self.n.y
-        self.b = self.n.x
-        self.c = -(self.a*a.x + self.b*a.y)
-        return self
-
     def __str__(self) -> str:
         return f'{self.a}x + {self.b}y + {self.c} = 0'
 
     def position(self, line: 'Line') -> Position:
         # вернет взамиорасполежение текущей прямой с переданной
-        eps = 10**-3
-        if abs(self.a*line.b - self.b*line.a) > eps:
+        if self.a*line.b - self.b*line.a != 0:
             return Position.intersect
-        if (abs(self.a*line.b - self.b*line.a) < eps and
-            abs(self.b*line.c - self.c*line.b) < eps and
-            abs(self.a*line.c - self.c*line.a) < eps):
+        if (self.a*line.b - self.b*line.a == 0 and
+            self.b*line.c - self.c*line.b == 0 and
+            self.a*line.c - self.c*line.a == 0):
             return Position.match
         return Position.parallel
 

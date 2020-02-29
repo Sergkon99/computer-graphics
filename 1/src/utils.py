@@ -3,9 +3,9 @@ from .on3d import Point as Point3D, Line as Line3D, Vector as Vector3D
 from .exceptions import InputError
 
 def intersects(*, s: Segment2D, r: Ray2D):
-    line = Line2D().from_points(s.a, s.b)
+    line = Line2D(a=s.a, b=s.b)
     if not line.belongs(r.a) or not line.belongs(r.b):
-        raise InputError('points do not belong to one line')
+        raise InputError('Points do not belong to one line')
     # s -> [a, b]
     # r -> [a, b)
     l_segment_x, r_segment_x =  min(s.a.x, s.b.x), max(s.a.x, s.b.x)

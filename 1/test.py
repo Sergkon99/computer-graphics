@@ -136,6 +136,12 @@ class TestGeom(unittest.TestCase):
         t_angle = Angle3D(a, b, c).type()
         self.assertEqual(t_angle, AngleType.Obtuse)
 
+        a = Point3D(x=5, y=0, z=1)
+        b = Point3D(x=0, y=0, z=2)
+        c = Point3D(x=-1, y=5, z=3)
+        t_angle = Angle3D(a, b, c).type()
+        self.assertEqual(t_angle, AngleType.Obtuse)
+
     def test_cross_product3d(self):
         a = Vector3D().from_coords(x=-1, y=2, z=-3)
         b = Vector3D().from_coords(x=0, y=-4, z=1)
@@ -153,6 +159,9 @@ class TestGeom(unittest.TestCase):
         ab = Vector3D(a, b)
         ac = Vector3D(a, c)
         ad = Vector3D(a, d)
+
+        with self.assertRaises(ValueError):
+            Line2D(a=1.2, b=2)
         # print(ab.len())
         # print(ab.cross(ac).len())
         # print(ab.cross(ad).len())
@@ -160,8 +169,8 @@ class TestGeom(unittest.TestCase):
     def test_2(self):
         a = Point2D(x=0, y=1)
         b = Point2D(x=2, y=2)
-        l = Line2D().from_points(a, b)
-        print(l)
+        l = Line2D(a=a, b=b)
+        # print(l)
 
     def test_once_line(self):
         a = Point3D()
