@@ -63,7 +63,7 @@ class MyWin(QMainWindow):
     def drawFigure(self, event=None):
         """
         @breif Основной метод для рисования фигуры
-        @param event без него не работает декоратор, возможно про срабатывании события что-то передаются
+        @param event: без него не работает декоратор, возможно про срабатывании события что-то передаются
         """
         painter = QPainter()
         painter.begin(self.pixmap)
@@ -83,8 +83,8 @@ class MyWin(QMainWindow):
     def drawLine(self, painter: QPainter, p1: Point, p2: Point):
         """
         @breif Метод для рисования отрезка между точками
-        @param painter объект QPainter для рисования
-        @param p1, p2 точки в декартовых координатах
+        @param painter: объект QPainter для рисования
+        @param p1, p2: точки в декартовых координатах
         """
         p1 = self.to_qpoint(p1)
         p2 = self.to_qpoint(p2)
@@ -94,8 +94,8 @@ class MyWin(QMainWindow):
     def drawEllipse(self, painter: QPainter, points: List[Point]):
         """
         @breif Метод для рисования эллипса внтру прямоугольника
-        @param painter объект QPainter для рисования
-        @param points список точек в декартовых координатах, задающих прямоугольник
+        @param painter: объект QPainter для рисования
+        @param points: список точек в декартовых координатах, задающих прямоугольник
         """
         lu: Point = Point(min([p.x() for p in points]),
                           max([p.y() for p in points]))
@@ -108,7 +108,7 @@ class MyWin(QMainWindow):
     def drawGrid(self, painter: QPainter):
         """
         @breif Метод для рисования сетки
-        @param painter объект QPainter для рисования
+        @param painter: объект QPainter для рисования
         """
         for dx in range(0, self.width, DrawConst.scaleX):
             painter.drawLine(dx, 0, dx, self.height)
@@ -123,7 +123,7 @@ class MyWin(QMainWindow):
     def mousePressEvent(self, e: QMouseEvent):
         """
         @breif Обработка события нажатия кнопки мыши
-        @param e событие
+        @param e: событие
         """
         t = e.pos()
         qp: QPoint = QPoint(t.x()-10, t.y()-10)
@@ -134,7 +134,7 @@ class MyWin(QMainWindow):
     def on_canvas(self, pos: QPoint):
         """
         @breif Проверяет, лежит ли точка внутри холста
-        @param pos позиция
+        @param pos: позиция
         """
         rect: QRect = self.ui.canvas.geometry()
         x = pos.x()
@@ -146,7 +146,7 @@ class MyWin(QMainWindow):
     def to_decart(self, qpoint: QPointF):
         """
         @breif Преобразования точки в декартовы координаты
-        @param qpoint точка в координатах холста(пиксели)
+        @param qpoint: точка в координатах холста(пиксели)
         """
         x = (qpoint.x() - self.o_x) / DrawConst.scaleX
         y = (-qpoint.y() + self.o_y) / DrawConst.scaleY
@@ -155,7 +155,7 @@ class MyWin(QMainWindow):
     def to_qpoint(self, point: Point):
         """
         @breif Преобразования точки в в координаты холста(пиксели)
-        @param point точка в декартовых координатах
+        @param point: точка в декартовых координатах
         """
         x = point.x() * DrawConst.scaleX + self.o_x
         y = -point.y() * DrawConst.scaleY + self.o_y
