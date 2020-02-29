@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         self.label.setGeometry(QtCore.QRect(700, 200, 47, 13))
         self.label.setObjectName("label")
         self.canvas = QtWidgets.QLabel(self.centralwidget)
-        self.canvas.setGeometry(QtCore.QRect(10, 10, 581, 541))
+        self.canvas.setGeometry(QtCore.QRect(10, 10, 600, 500))
         self.canvas.setFrameShape(QtWidgets.QFrame.Box)
         self.canvas.setText("")
         self.canvas.setObjectName("canvas")
