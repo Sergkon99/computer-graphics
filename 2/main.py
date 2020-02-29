@@ -35,9 +35,15 @@ class MyWin(QMainWindow):
 
         # связываем клик с вызовом функции
         self.ui.pushButton.clicked.connect(self.drawFigure)
+        # self.drawFigure()
 
 
     def __init_canvas(self, w, h):
+        """
+        @breif Начальная инициализиция холста
+        @param w: ширина холста
+        @param h: высота холста
+        """
         self.pixmap = QPixmap(w, h)
         self.pixmap.fill(Qt.white)
         painter = QPainter()
@@ -53,8 +59,12 @@ class MyWin(QMainWindow):
     def DoIt(self):
         self.ui.label.setText(str(random.randint(1, 10)))
 
-    def drawFigure(self):
-        # print('drawFigure start')
+    @log_method
+    def drawFigure(self, event=None):
+        """
+        @breif Основной метод для рисования фигуры
+        @param event без него не работает декоратор, возможно про срабатывании события что-то передаются
+        """
         painter = QPainter()
         painter.begin(self.pixmap)
 
@@ -68,16 +78,25 @@ class MyWin(QMainWindow):
 
         painter.end()
         self.ui.canvas.setPixmap(self.pixmap)
-        # print('drawFigure end')
 
+    @log_method
     def drawLine(self, painter: QPainter, p1: Point, p2: Point):
+        """
+        @breif Метод для рисования отрезка между точками
+        @param painter объект QPainter для рисования
+        @param p1, p2 точки в декартовых координатах
+        """
         p1 = self.to_qpoint(p1)
         p2 = self.to_qpoint(p2)
         painter.drawLine(p1, p2)
 
+    @log_method
     def drawEllipse(self, painter: QPainter, points: List[Point]):
-        print('drawEllipse start')
-
+        """
+        @breif Метод для рисования эллипса внтру прямоугольника
+        @param painter объект QPainter для рисования
+        @param points список точек в декартовых координатах, задающих прямоугольник
+        """
         lu: Point = Point(min([p.x() for p in points]),
                           max([p.y() for p in points]))
         rd: Point = Point(max([p.x() for p in points]),
@@ -85,11 +104,12 @@ class MyWin(QMainWindow):
         rect: QRect = QRect(self.to_qpoint(lu), self.to_qpoint(rd)) 
         painter.drawEllipse(rect)
 
-        print('drawEllipse end')
-
+    @log_method
     def drawGrid(self, painter: QPainter):
-        print('drawGrid start')
-
+        """
+        @breif Метод для рисования сетки
+        @param painter объект QPainter для рисования
+        """
         for dx in range(0, self.width, DrawConst.scaleX):
             painter.drawLine(dx, 0, dx, self.height)
 
@@ -100,9 +120,11 @@ class MyWin(QMainWindow):
         painter.drawLine(0, self.o_y, self.width, self.o_y)
         painter.drawLine(self.o_x, 0, self.o_x, self.height)
 
-        print('drawGrid end')
-
     def mousePressEvent(self, e: QMouseEvent):
+        """
+        @breif Обработка события нажатия кнопки мыши
+        @param e событие
+        """
         t = e.pos()
         qp: QPoint = QPoint(t.x()-10, t.y()-10)
         p = self.to_decart(qp)
@@ -110,21 +132,31 @@ class MyWin(QMainWindow):
         print(self.to_qpoint(p))
 
     def on_canvas(self, pos: QPoint):
+        """
+        @breif Проверяет, лежит ли точка внутри холста
+        @param pos позиция
+        """
         rect: QRect = self.ui.canvas.geometry()
         x = pos.x()
         y = pos.y()
-        if (x >= rect.x() and x <= rect.x() + rect.width() and
-            y >= rect.y() and y <= rect.y() + rect.height()):
-            print('in!')
-        else:
-            print('out')
+        return (x >= rect.x() and x <= rect.x() + rect.width() and
+                y >= rect.y() and y <= rect.y() + rect.height())
+
 
     def to_decart(self, qpoint: QPointF):
+        """
+        @breif Преобразования точки в декартовы координаты
+        @param qpoint точка в координатах холста(пиксели)
+        """
         x = (qpoint.x() - self.o_x) / DrawConst.scaleX
         y = (-qpoint.y() + self.o_y) / DrawConst.scaleY
         return Point(x, y)
 
     def to_qpoint(self, point: Point):
+        """
+        @breif Преобразования точки в в координаты холста(пиксели)
+        @param point точка в декартовых координатах
+        """
         x = point.x() * DrawConst.scaleX + self.o_x
         y = -point.y() * DrawConst.scaleY + self.o_y
         return QPoint(x, y)
