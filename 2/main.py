@@ -5,7 +5,8 @@ from PyQt5.QtGui import QPainter, QPixmap, QColor, QMouseEvent
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication
 # from PyQt5.QtCore.QEvent import QMouseEvent
 import random
-from utils import Point, log_method
+from utils import log_method
+from geometric import Point
 from constants import DrawConst
 from typing import List
 

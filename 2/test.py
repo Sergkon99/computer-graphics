@@ -1,6 +1,6 @@
 import unittest
 
-from utils import Matrix, Vector
+from algebraic import Matrix, Vector
 
 class TestGeom(unittest.TestCase):
     def test_mul_matrix(self):
@@ -69,6 +69,14 @@ class TestGeom(unittest.TestCase):
             [-1, 1, 0, 2]
         ])
         self.assertEqual(a*b, c)
+
+    def test_1(self):
+        a = Matrix([
+            [2, 4, 0],
+            [-2, 1, 3],
+            [-1, 0, 1]
+        ])
+        print(repr(a))
 
 
 if __name__ == "__main__":
