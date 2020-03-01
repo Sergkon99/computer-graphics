@@ -87,13 +87,13 @@ class MyWin(QMainWindow):
             cur = generate_figure()
             drawCurrentFigure = self.drawMyFigure
         elif figure == 'квадрат':
-            cur = DrawConst.rect
+            cur = generate_rect()
             drawCurrentFigure = self.drawFigureRect
         elif figure == 'ромб':
-            cur = DrawConst.rhomb
+            cur = generate_rhomb()
             drawCurrentFigure = self.drawFigureRect
         elif figure == 'круг':
-            cur = DrawConst.circle
+            cur = generate_circle()
             drawCurrentFigure = self.drawFigureCircle
         elif figure == 'звезда':
             cur = generate_star()

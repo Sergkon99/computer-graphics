@@ -1,5 +1,4 @@
 from math import sin, cos, pi
-from enum import Enum
 
 def frange(start, stop, step):
     while start <= stop:
@@ -26,14 +25,3 @@ class DrawConst:
     # смещение фигуры относитльно (0, 0)
     dx = 0
     dy = 0
-    rect = [(-r, r), (r, r), (r, -r), (-r, -r)]
-    circle = [(3*cos(t), 3*sin(t)) for t in frange(0, 2*pi, 0.01)]
-    rhomb = [(-r, 0), (0, r),(r, 0), (0, -r)]
-
-class FigureType(Enum):
-    none = 0
-    my = 1
-    rect = 2
-    rhomb = 3
-    circle = 4
-    star = 5
