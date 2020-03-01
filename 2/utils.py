@@ -2,6 +2,27 @@ import time
 from functools import wraps
 from algebraic import *
 from geometric import *
+from math import sin, cos, pi
+from constants import DrawConst
+
+def frange(start, stop, step):
+    while start <= stop:
+        yield start
+        start += step
+
+def generate_figure():
+    r = DrawConst.r
+    dx = DrawConst.dx
+    dy = DrawConst.dy
+    figure = []
+    # генерируем точки на окружности
+    for t in frange(0, 2*pi, 0.01):
+        figure.append(Point(r*cos(t)+dx, r*sin(t)+dy))
+    # задем прямые
+    figure.extend([Point(-r+dx, dy) ,Point(r+dx, dy)])
+    figure.extend([Point(dx, -r+dy) ,Point(dx, r+dy)])
+
+    return figure
 
 def log_method(func):
     # Декоратор логгирования
@@ -84,4 +105,21 @@ def scale(p: Point, x: float=1, y: float=1):
     ])
     vector = to_vector(p)
     return to_point(scale*vector)
+
+def rotate(p: Point, angle: float):
+    """
+    @breif Метод для поворота точки на угол
+    @param p: точка
+    @param angle: угол
+    @return Точка-результат
+    """
+    angle = angle*pi/180
+    rotate = Matrix([
+        [cos(angle), sin(angle), 0],
+        [-sin(angle), cos(angle), 0],
+        [0, 0, 1]
+    ])
+    vector = to_vector(p)
+    return to_point(rotate*vector)
+
 

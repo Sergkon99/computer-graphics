@@ -1,7 +1,7 @@
 import sys
 from ui.ui import *
 from PyQt5.QtCore import Qt, QPointF, QRect, QPoint
-from PyQt5.QtGui import QPainter, QPixmap, QColor, QMouseEvent
+from PyQt5.QtGui import QPainter, QPixmap, QColor, QMouseEvent, QPolygon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication
 # from PyQt5.QtCore.QEvent import QMouseEvent
 import random
@@ -18,7 +18,8 @@ class MyWin(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.figure = list(map(Point, DrawConst.figure))
+        # self.figure = list(map(Point, DrawConst.figure))
+        self.figure = generate_figure()
         self.global_state = self.figure.copy()
         # print(self.figure)
 
@@ -38,7 +39,6 @@ class MyWin(QMainWindow):
         self.defaultPos()
 
         # связываем клик с вызовом функции
-        # self.ui.pushButton.clicked.connect(self.drawMovedFigure)
         self.ui.pb_default.clicked.connect(self.defaultPos)
         self.ui.pb_move_x.clicked.connect(self.moveFigureX)
         self.ui.pb_move_y.clicked.connect(self.moveFigureY)
@@ -46,6 +46,7 @@ class MyWin(QMainWindow):
         self.ui.pb_reflection_y.clicked.connect(self.reflectionY)
         self.ui.pb_reflection_xy.clicked.connect(self.reflectionXY)
         self.ui.pb_scale.clicked.connect(self.scale)
+        self.ui.pb_rotate.clicked.connect(self.rotate)
         # события ui элементов
         self.ui.le_move.inputRejected.connect(lambda : print('line edit event'))
         self.ui.cb_global_figure.stateChanged.connect(self.changeGlobal)
@@ -164,12 +165,33 @@ class MyWin(QMainWindow):
         """
         Метод для отрисовки масштабирования
         """
-        scale_x = float(self.ui.le_scale_x.text() or 1)
-        scale_y = float(self.ui.le_scale_y.text() or 1)
-        scale_xy = partial(scale, x=scale_x, y=scale_y)
-        figure = list(map(scale_xy, self._get_figure()))
-        self.drawFigure(figure)
+        try:
+            scale_x = float(self.ui.le_scale_x.text() or 1)
+            scale_y = float(self.ui.le_scale_y.text() or 1)
+            scale_xy = partial(scale, x=scale_x, y=scale_y)
+            figure = list(map(scale_xy, self._get_figure()))
+            self.drawFigure(figure)
+        except ValueError as ex:
+            self.ui.le_scale_x.setText('')
+            self.ui.le_scale_y.setText('')
+            print(str(ex))
+        except Exception as ex:
+            print('Unknown error: ' + str(ex))
 
+    def rotate(self):
+        """
+        Метод для поворота фигуры относительно (0, 0)
+        """
+        try:
+            angle = float(self.ui.le_rotate_angle.text())
+            p_rotate = partial(rotate, angle=angle)
+            figure = list(map(p_rotate, self._get_figure()))
+            self.drawFigure(figure)
+        except ValueError as ex:
+            self.ui.le_rotate_angle.setText('')
+            print(str(ex))
+        except Exception as ex:
+            print('Unknown error: ' + str(ex))
 
     @log_method
     def drawFigure(self, figure: List[Point], event=None):
@@ -191,9 +213,11 @@ class MyWin(QMainWindow):
             self.drawGrid(painter)
 
         painter.setPen(Qt.red)
-        self.drawEllipse(painter, figure)
-        self.drawLine(painter, figure[0], figure[2])
-        self.drawLine(painter, figure[1], figure[3])
+
+        # Посление 4 точки задают прямые(так сгенерировано)
+        self.drawEllipse(painter, figure[:-4])
+        self.drawLine(painter, figure[-2], figure[-1])
+        self.drawLine(painter, figure[-4], figure[-3])
 
         painter.end()
         self.setPixmap()
@@ -210,18 +234,17 @@ class MyWin(QMainWindow):
         painter.drawLine(p1, p2)
 
     @log_method
-    def drawEllipse(self, painter: QPainter, points: List[Point]):
+    def drawEllipse(self, painter: QPainter, figure: List[Point]):
         """
-        @breif Метод для рисования эллипса внтру прямоугольника
+        @breif Метод для рисования эллипса
         @param painter: объект QPainter для рисования
-        @param points: список точек в декартовых координатах, задающих прямоугольник
+        @param figure: точки, задающие зллипс
+        @info При поворте эллипса упираемся в то, что нельзя задать наклонный прямоугольник
+              !Все методы рисуют эллипс с осями, паралельными координатным осям
+              Повернуть его без использования встроенных функций невозможно
         """
-        lu: Point = Point(min([p.x() for p in points]),
-                          max([p.y() for p in points]))
-        rd: Point = Point(max([p.x() for p in points]),
-                          min([p.y() for p in points]))
-        rect: QRect = QRect(self.to_qpoint(lu), self.to_qpoint(rd)) 
-        painter.drawEllipse(rect)
+        polygon: QPolygon = QPolygon(list(map(self.to_qpoint, figure[:-4])))
+        painter.drawPolygon(polygon)
 
     def drawGrid(self, painter: QPainter):
         """
