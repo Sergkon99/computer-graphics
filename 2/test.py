@@ -82,7 +82,7 @@ class TestGeom(unittest.TestCase):
         v = to_vector(p)
         print(v)
         g = GeometricVector(3, 4)
-        v = move_to(p, g)
+        # v = move_to(p, g)
         print(v[0], v[1])
         print(repr(v))
         p = to_point(v)

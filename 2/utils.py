@@ -122,4 +122,31 @@ def rotate(p: Point, angle: float):
     vector = to_vector(p)
     return to_point(rotate*vector)
 
+def rotate_from(p: Point, angle: float, x: Point):
+    """
+    @breif Метод для поворота точки на угол относитьльно другой точки
+    @param p: точка
+    @param angle: угол
+    @param x: точка отсчета
+    @return Точка-результат
+    """
+    angle = angle*pi/180
+    move_to = Matrix([
+        [1, 0, x.x()],
+        [0, 1, x.y()],
+        [0, 0, 1]
+    ])
+    move_from = Matrix([
+        [1, 0, -x.x()],
+        [0, 1, -x.y()],
+        [0, 0, 1]
+    ])
+    rotate = Matrix([
+        [cos(angle), sin(angle), 0],
+        [-sin(angle), cos(angle), 0],
+        [0, 0, 1]
+    ])
+    vector = to_vector(p)
+    return to_point(move_to*rotate*move_from*vector)
+
 

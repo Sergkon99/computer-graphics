@@ -47,6 +47,7 @@ class MyWin(QMainWindow):
         self.ui.pb_reflection_xy.clicked.connect(self.reflectionXY)
         self.ui.pb_scale.clicked.connect(self.scale)
         self.ui.pb_rotate.clicked.connect(self.rotate)
+        self.ui.pb_rotate_from_point.clicked.connect(self.rotateFromPoint)
         # события ui элементов
         self.ui.le_move.inputRejected.connect(lambda : print('line edit event'))
         self.ui.cb_global_figure.stateChanged.connect(self.changeGlobal)
@@ -192,6 +193,14 @@ class MyWin(QMainWindow):
             print(str(ex))
         except Exception as ex:
             print('Unknown error: ' + str(ex))
+
+    def rotateFromPoint(self):
+        x = float(self.ui.le_rotate_from_point_x.text())
+        y = float(self.ui.le_rotate_from_point_y.text())
+        angle = float(self.ui.le_rotate_angle.text())
+        p_rotate_from = partial(rotate_from, angle=angle, x=Point(x, y))
+        figure = list(map(p_rotate_from, self._get_figure()))
+        self.drawFigure(figure)
 
     @log_method
     def drawFigure(self, figure: List[Point], event=None):

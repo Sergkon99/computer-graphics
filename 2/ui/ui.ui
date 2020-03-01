@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>692</height>
+    <width>820</width>
+    <height>702</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,88 +34,13 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>10</y>
-      <width>171</width>
+      <y>620</y>
+      <width>191</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>Сбросить</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_move_x">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>60</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Сместить по X</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_move_y">
-    <property name="geometry">
-     <rect>
-      <x>710</x>
-      <y>60</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Сместить по Y</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="le_move">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>100</y>
-      <width>171</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_reflection_x">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>140</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Отразить относительно Ox</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_reflection_y">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>180</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Отразить относительно Oy</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_reflection_xy">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>220</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Отразить относительно X=Y</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="cb_global_figure">
@@ -134,109 +59,317 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="le_scale_x">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>270</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="le_scale_y">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>300</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_scale">
-    <property name="geometry">
-     <rect>
-      <x>624</x>
-      <y>330</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Приментить масштаб</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>270</y>
-      <width>51</width>
-      <height>21</height>
+      <y>10</y>
+      <width>191</width>
+      <height>91</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Ox:</string>
+    <property name="title">
+     <string>Смещение</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
+    <widget class="QLineEdit" name="le_move">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>171</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_move_y">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>20</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Сместить по Y</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_move_x">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Сместить по X</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>300</y>
-      <width>51</width>
-      <height>21</height>
+      <y>110</y>
+      <width>191</width>
+      <height>141</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Oy:</string>
+    <property name="title">
+     <string>Отражение</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
+    <widget class="QPushButton" name="pb_reflection_xy">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Отразить относительно X=Y</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_reflection_x">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Отразить относительно Ox</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_reflection_y">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Отразить относительно Oy</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QLineEdit" name="le_rotate_angle">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>380</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_rotate">
-    <property name="geometry">
-     <rect>
-      <x>624</x>
-      <y>410</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Повернуть</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>380</y>
-      <width>51</width>
-      <height>21</height>
+      <y>260</y>
+      <width>191</width>
+      <height>121</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Угол:</string>
+    <property name="title">
+     <string>Масштаб</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>6</x>
+       <y>50</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Oy:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>6</x>
+       <y>20</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Ox:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_scale_x">
+     <property name="geometry">
+      <rect>
+       <x>66</x>
+       <y>20</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_scale_y">
+     <property name="geometry">
+      <rect>
+       <x>66</x>
+       <y>50</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_scale">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Приментить масштаб</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>390</y>
+      <width>191</width>
+      <height>221</height>
+     </rect>
     </property>
+    <property name="title">
+     <string>Поворот</string>
+    </property>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>90</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Относительно точки</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_rotate_from_point_y">
+     <property name="geometry">
+      <rect>
+       <x>66</x>
+       <y>150</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>6</x>
+       <y>120</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>x:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_rotate_from_point">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Повернуть</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_rotate">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Повернуть</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_rotate_from_point_x">
+     <property name="geometry">
+      <rect>
+       <x>66</x>
+       <y>120</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_rotate_angle">
+     <property name="geometry">
+      <rect>
+       <x>66</x>
+       <y>20</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>6</x>
+       <y>20</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Угол:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>6</x>
+       <y>150</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>y:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -244,7 +377,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>820</width>
      <height>21</height>
     </rect>
    </property>
