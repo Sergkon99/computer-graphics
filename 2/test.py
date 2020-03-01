@@ -1,6 +1,7 @@
 import unittest
 
 from algebraic import Matrix, Vector
+from utils import *
 
 class TestGeom(unittest.TestCase):
     def test_mul_matrix(self):
@@ -76,7 +77,16 @@ class TestGeom(unittest.TestCase):
             [-2, 1, 3],
             [-1, 0, 1]
         ])
-        print(repr(a))
+        # print(repr(a))
+        p = Point(2, 3)
+        v = to_vector(p)
+        print(v)
+        g = GeometricVector(3, 4)
+        v = move_to(p, g)
+        print(v[0], v[1])
+        print(repr(v))
+        p = to_point(v)
+        print(p)
 
 
 if __name__ == "__main__":

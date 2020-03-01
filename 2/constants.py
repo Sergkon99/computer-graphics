@@ -14,3 +14,6 @@ class DrawConst:
     ymax = 3
     # для холста
     grid = False
+    axes = True
+    r = 3
+    figure = [(-r, 0), (0, r), (r, 0), (0, -r)]

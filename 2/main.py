@@ -5,10 +5,11 @@ from PyQt5.QtGui import QPainter, QPixmap, QColor, QMouseEvent
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication
 # from PyQt5.QtCore.QEvent import QMouseEvent
 import random
-from utils import log_method
+from utils import log_method, move_on
 from geometric import Point
 from constants import DrawConst
 from typing import List
+from functools import partial
 
 
 class MyWin(QMainWindow):
@@ -17,9 +18,7 @@ class MyWin(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # TODO это нужно вынести в константы
-        r = 3
-        self.figure = list(map(Point, [(-r, 0), (0, r), (r, 0), (0, -r)]))
+        self.figure = list(map(Point, DrawConst.figure))
         print(self.figure)
 
         # размеры холста (ширрина и высота) в пикселях
@@ -33,11 +32,15 @@ class MyWin(QMainWindow):
 
         # инициализируем холст
         self.__init_canvas(self.width, self.height)
+        self.defaultPos()
 
         # связываем клик с вызовом функции
-        self.ui.pushButton.clicked.connect(self.drawFigure)
+        # self.ui.pushButton.clicked.connect(self.drawMovedFigure)
+        self.ui.pb_default.clicked.connect(self.defaultPos)
+        self.ui.pb_move_x.clicked.connect(self.moveFigureX)
+        self.ui.pb_move_y.clicked.connect(self.moveFigureY)
+        self.ui.le_move.inputRejected.connect(lambda : print('fdsfd'))
         # self.drawFigure()
-
 
     def __init_canvas(self, w, h):
         """
@@ -50,35 +53,86 @@ class MyWin(QMainWindow):
         painter = QPainter()
         painter.begin(self.pixmap)
 
+        if DrawConst.axes:
+            self.drawAxes(painter)
         if DrawConst.grid:
             self.drawGrid(painter)
 
         painter.end()
 
-        self.ui.canvas.setPixmap(self.pixmap)
+        self.setPixmap()
 
     def DoIt(self):
         self.ui.label.setText(str(random.randint(1, 10)))
 
+    def clearCanvas(self):
+        self.pixmap.fill(Qt.white)
+        self.setPixmap()
+
+    def setPixmap(self):
+        self.ui.canvas.setPixmap(self.pixmap)
+
+    def defaultPos(self):
+        self.drawFigure(self.figure)
+
+    def drawMovedFigure(self, x, y):
+        """
+        @breif Нарисовать смещенную фигуру
+        @param x, y на сколько сместить по каждой из осей в декартовых координатах
+        """
+        p_move_on = partial(move_on, x=x, y=y)
+        figure = list(map(p_move_on, self.figure))
+        self.drawFigure(figure)
+
+    def moveFigureX(self):
+        """
+        Сместить фигуру по ось x
+        """
+        try:
+            dx = int(self.ui.le_move.text())
+            self.drawMovedFigure(int(dx), 0)
+        except ValueError as ex:
+            self.ui.le_move.setText('')
+            print(ex)
+        except Exception as ex:
+            print('Unknown error: ' + str(ex))
+
+    def moveFigureY(self):
+        """
+        Сместить фигуру по ось y
+        """
+        try:
+            dy = int(self.ui.le_move.text())
+            self.drawMovedFigure(0, int(dy))
+        except ValueError as ex:
+            self.ui.le_move.setText('')
+            print(ex)
+        except Exception as ex:
+            print('Unknown error: ' + str(ex))
+
     @log_method
-    def drawFigure(self, event=None):
+    def drawFigure(self, figure: List[Point], event=None):
         """
         @breif Основной метод для рисования фигуры
         @param event: без него не работает декоратор, возможно про срабатывании события что-то передаются
         """
+        # Очистим холст перед рисованием
+        self.clearCanvas()
         painter = QPainter()
         painter.begin(self.pixmap)
 
+        if DrawConst.axes:
+            self.drawAxes(painter)
         if DrawConst.grid:
             self.drawGrid(painter)
 
         painter.setPen(Qt.red)
-        self.drawEllipse(painter, self.figure)
-        self.drawLine(painter, self.figure[0], self.figure[2])
-        self.drawLine(painter, self.figure[1], self.figure[3])
+        self.drawEllipse(painter, figure)
+        self.drawLine(painter, figure[0], figure[2])
+        self.drawLine(painter, figure[1], figure[3])
 
         painter.end()
-        self.ui.canvas.setPixmap(self.pixmap)
+        self.setPixmap()
 
     @log_method
     def drawLine(self, painter: QPainter, p1: Point, p2: Point):
@@ -117,7 +171,8 @@ class MyWin(QMainWindow):
         for dy in range(0, self.height, DrawConst.scaleY):
             painter.drawLine(0, dy, self.width, dy)
 
-        painter.setPen(Qt.red)
+    @log_method
+    def drawAxes(self, painter: QPainter):
         painter.drawLine(0, self.o_y, self.width, self.o_y)
         painter.drawLine(self.o_x, 0, self.o_x, self.height)
 

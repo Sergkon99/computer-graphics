@@ -47,7 +47,7 @@ class GeometricVector:
     Класс вектора
     P.S. похоже не нужен
     """
-    def __init__(self, x, y, z=0):
+    def __init__(self, x, y, z=1):
         self._x = x
         self._y = y
         self._z = z
