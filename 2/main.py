@@ -27,8 +27,8 @@ class MyWin(QMainWindow):
         # print(f'width={self.width}\nheight={self.height}')
 
         # координаты центра(0, 0) в координатах холста(в пикселях)
-        self.o_x = self.width * DrawConst.centerX
-        self.o_y = self.height * DrawConst.centerY
+        self.o_x = int(self.width * DrawConst.centerX)
+        self.o_y = int(self.height * DrawConst.centerY)
 
         # инициализируем холст
         self.__init_canvas(self.width, self.height)
@@ -176,6 +176,20 @@ class MyWin(QMainWindow):
         painter.drawLine(0, self.o_y, self.width, self.o_y)
         painter.drawLine(self.o_x, 0, self.o_x, self.height)
 
+        for dx in range(0, self.width, DrawConst.scaleX):
+            if dx == self.o_x:
+                continue
+            painter.drawEllipse(QPoint(dx, self.o_y), 1, 1)
+            qp: QPoint = QPoint(dx, self.o_y)
+            painter.drawText(dx-2, self.o_y-2, str(int(self.to_decart(qp).x())))
+
+        for dy in range(0, self.height, DrawConst.scaleY):
+            if dy == self.o_y:
+                continue
+            painter.drawEllipse(QPoint(self.o_x, dy), 1, 1)
+            qp: QPoint = QPoint(self.o_x, dy)
+            painter.drawText(self.o_x+4, dy+4, str(int(self.to_decart(qp).y())))
+
     def mousePressEvent(self, e: QMouseEvent):
         """
         @breif Обработка события нажатия кнопки мыши
@@ -199,7 +213,7 @@ class MyWin(QMainWindow):
                 y >= rect.y() and y <= rect.y() + rect.height())
 
 
-    def to_decart(self, qpoint: QPointF):
+    def to_decart(self, qpoint: QPoint):
         """
         @breif Преобразования точки в декартовы координаты
         @param qpoint: точка в координатах холста(пиксели)
