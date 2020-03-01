@@ -6,6 +6,7 @@ class Matrix:
     """
     def __init__(self, rows: List[List]=None, n: int=None, m: int=None):
         if rows:
+            # Матрица на основе переднанного двумерного списка
             self._rows = rows
             if len(rows) == 0:
                 raise Exception('Empty list')
@@ -14,6 +15,7 @@ class Matrix:
                 if len(row) != cnt_rows:
                     raise Exception('lenghts in rows not equal')
         elif n and m:
+            # Нулевая матрица по переданным размерам
             self._rows = [[0 for _ in range(m)] for _ in range(n)]
         else:
             ValueError('Overload not exists')

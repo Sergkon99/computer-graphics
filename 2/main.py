@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPainter, QPixmap, QColor, QMouseEvent
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication
 # from PyQt5.QtCore.QEvent import QMouseEvent
 import random
-from utils import log_method, move_on
+from utils import *
 from geometric import Point
 from constants import DrawConst
 from typing import List
@@ -19,7 +19,8 @@ class MyWin(QMainWindow):
         self.ui.setupUi(self)
 
         self.figure = list(map(Point, DrawConst.figure))
-        print(self.figure)
+        self.global_state = self.figure.copy()
+        # print(self.figure)
 
         # размеры холста (ширрина и высота) в пикселях
         self.width = self.ui.canvas.width()
@@ -29,6 +30,8 @@ class MyWin(QMainWindow):
         # координаты центра(0, 0) в координатах холста(в пикселях)
         self.o_x = int(self.width * DrawConst.centerX)
         self.o_y = int(self.height * DrawConst.centerY)
+        # нужно ли запоминать промежуточные состояния
+        self.state = self.ui.cb_global_figure.isChecked()
 
         # инициализируем холст
         self.__init_canvas(self.width, self.height)
@@ -39,8 +42,12 @@ class MyWin(QMainWindow):
         self.ui.pb_default.clicked.connect(self.defaultPos)
         self.ui.pb_move_x.clicked.connect(self.moveFigureX)
         self.ui.pb_move_y.clicked.connect(self.moveFigureY)
-        self.ui.le_move.inputRejected.connect(lambda : print('fdsfd'))
-        # self.drawFigure()
+        self.ui.pb_reflection_x.clicked.connect(self.reflectionX)
+        self.ui.pb_reflection_y.clicked.connect(self.reflectionY)
+        self.ui.pb_reflection_xy.clicked.connect(self.reflectionXY)
+        # события ui элементов
+        self.ui.le_move.inputRejected.connect(lambda : print('line edit event'))
+        self.ui.cb_global_figure.stateChanged.connect(self.changeGlobal)
 
     def __init_canvas(self, w, h):
         """
@@ -62,17 +69,32 @@ class MyWin(QMainWindow):
 
         self.setPixmap()
 
-    def DoIt(self):
-        self.ui.label.setText(str(random.randint(1, 10)))
+    def changeGlobal(self):
+        self.state: bool = self.ui.cb_global_figure.isChecked()
+        print(self.state)
 
     def clearCanvas(self):
+        """
+        Очистить холст глобально
+        """
         self.pixmap.fill(Qt.white)
         self.setPixmap()
 
     def setPixmap(self):
+        """
+        Установить pixmap на lable(холст)
+        """
         self.ui.canvas.setPixmap(self.pixmap)
 
+    def _get_figure(self):
+        return self.global_state if self.state else self.figure
+
     def defaultPos(self):
+        """
+        Нарисовать фигуру на дефолтной позиции
+        """
+        if self.state:
+            self.global_state = self.figure.copy()
         self.drawFigure(self.figure)
 
     def drawMovedFigure(self, x, y):
@@ -81,12 +103,12 @@ class MyWin(QMainWindow):
         @param x, y на сколько сместить по каждой из осей в декартовых координатах
         """
         p_move_on = partial(move_on, x=x, y=y)
-        figure = list(map(p_move_on, self.figure))
+        figure = list(map(p_move_on, self._get_figure()))
         self.drawFigure(figure)
 
     def moveFigureX(self):
         """
-        Сместить фигуру по ось x
+        Сместить фигуру по оси x
         """
         try:
             dx = int(self.ui.le_move.text())
@@ -99,7 +121,7 @@ class MyWin(QMainWindow):
 
     def moveFigureY(self):
         """
-        Сместить фигуру по ось y
+        Сместить фигуру по оси y
         """
         try:
             dy = int(self.ui.le_move.text())
@@ -110,12 +132,40 @@ class MyWin(QMainWindow):
         except Exception as ex:
             print('Unknown error: ' + str(ex))
 
+    def reflectionX(self):
+        """
+        Отразит фигуру относительно оси х
+        """
+        reflection_x = partial(reflection, x=True, y=False)
+        figure = list(map(reflection_x, self._get_figure()))
+        self.drawFigure(figure)
+
+    def reflectionY(self):
+        """
+        Отразит фигуру относительно оси y
+        """
+        reflection_y = partial(reflection, x=False, y=True)
+        figure = list(map(reflection_y, self._get_figure()))
+        self.drawFigure(figure)
+
+    def reflectionXY(self):
+        """
+        Отразит фигуру относительно прямой X=Y
+        """
+        reflection_xy = partial(reflection, x=True, y=True)
+        figure = list(map(reflection_xy, self._get_figure()))
+        self.drawFigure(figure)
+
+
     @log_method
     def drawFigure(self, figure: List[Point], event=None):
         """
         @breif Основной метод для рисования фигуры
         @param event: без него не работает декоратор, возможно про срабатывании события что-то передаются
         """
+        # Сохраним глобальное состояние фигуры, если нужно
+        if self.state:
+            self.global_state = figure.copy()
         # Очистим холст перед рисованием
         self.clearCanvas()
         painter = QPainter()
@@ -159,7 +209,6 @@ class MyWin(QMainWindow):
         rect: QRect = QRect(self.to_qpoint(lu), self.to_qpoint(rd)) 
         painter.drawEllipse(rect)
 
-    @log_method
     def drawGrid(self, painter: QPainter):
         """
         @breif Метод для рисования сетки
@@ -171,8 +220,11 @@ class MyWin(QMainWindow):
         for dy in range(0, self.height, DrawConst.scaleY):
             painter.drawLine(0, dy, self.width, dy)
 
-    @log_method
     def drawAxes(self, painter: QPainter):
+        """
+        @breif Метод для рисования осей с подписями
+        @param painter: объект QPainter для рисования
+        """
         painter.drawLine(0, self.o_y, self.width, self.o_y)
         painter.drawLine(self.o_x, 0, self.o_x, self.height)
 

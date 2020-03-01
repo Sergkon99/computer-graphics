@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>640</x>
-      <y>240</y>
+      <y>490</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>700</x>
-      <y>200</y>
+      <y>450</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -103,6 +103,58 @@
       <width>171</width>
       <height>20</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_reflection_x">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>140</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отразить относительно Ox</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_reflection_y">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>180</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отразить относительно Oy</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_reflection_xy">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>220</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отразить относительно X=Y</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cb_global_figure">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>520</y>
+      <width>221</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сохранять промежуточные состояния</string>
     </property>
    </widget>
   </widget>
