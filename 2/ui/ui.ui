@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>110</y>
+      <x>640</x>
+      <y>240</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -54,6 +54,55 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_default">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>10</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>По умолчанию</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_move_x">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>60</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сместить по X</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_move_y">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>60</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сместить по Y</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="le_move">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>100</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
     </property>
    </widget>
   </widget>
