@@ -71,3 +71,17 @@ def reflection(p: Point, x: bool=False, y:bool=False):
         return to_point(ref_y*vector)
     raise RuntimeError('Unknown reflection')
 
+def scale(p: Point, x: float=1, y: float=1):
+    """
+    @breif Мастабирование по осям
+    @param x, y: Коэффиценты масшиабирования по осям соответсвенно
+    @return тока-результат
+    """
+    scale = Matrix([
+        [x, 0, 0],
+        [0, y, 0],
+        [0, 0, 1]
+    ])
+    vector = to_vector(p)
+    return to_point(scale*vector)
+

@@ -31,7 +31,7 @@ class MyWin(QMainWindow):
         self.o_x = int(self.width * DrawConst.centerX)
         self.o_y = int(self.height * DrawConst.centerY)
         # нужно ли запоминать промежуточные состояния
-        self.state = self.ui.cb_global_figure.isChecked()
+        self.state: bool = self.ui.cb_global_figure.isChecked()
 
         # инициализируем холст
         self.__init_canvas(self.width, self.height)
@@ -45,6 +45,7 @@ class MyWin(QMainWindow):
         self.ui.pb_reflection_x.clicked.connect(self.reflectionX)
         self.ui.pb_reflection_y.clicked.connect(self.reflectionY)
         self.ui.pb_reflection_xy.clicked.connect(self.reflectionXY)
+        self.ui.pb_scale.clicked.connect(self.scale)
         # события ui элементов
         self.ui.le_move.inputRejected.connect(lambda : print('line edit event'))
         self.ui.cb_global_figure.stateChanged.connect(self.changeGlobal)
@@ -70,8 +71,11 @@ class MyWin(QMainWindow):
         self.setPixmap()
 
     def changeGlobal(self):
+        """
+        Изменить флаг о сохранении промежуточных состояниях при смене состояния chex box-a (по событию)
+        """
         self.state: bool = self.ui.cb_global_figure.isChecked()
-        print(self.state)
+        # print(self.state)
 
     def clearCanvas(self):
         """
@@ -154,6 +158,16 @@ class MyWin(QMainWindow):
         """
         reflection_xy = partial(reflection, x=True, y=True)
         figure = list(map(reflection_xy, self._get_figure()))
+        self.drawFigure(figure)
+
+    def scale(self):
+        """
+        Метод для отрисовки масштабирования
+        """
+        scale_x = float(self.ui.le_scale_x.text() or 1)
+        scale_y = float(self.ui.le_scale_y.text() or 1)
+        scale_xy = partial(scale, x=scale_x, y=scale_y)
+        figure = list(map(scale_xy, self._get_figure()))
         self.drawFigure(figure)
 
 

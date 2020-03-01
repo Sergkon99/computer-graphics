@@ -1,7 +1,7 @@
 class DrawConst:
     # кол-во пикселей на клетку
-    scaleX = 50
-    scaleY = 50
+    scaleX = 20
+    scaleY = 20
     # координаты центра в %
     centerX = 0.5
     centerY = 0.5
@@ -16,4 +16,7 @@ class DrawConst:
     grid = False
     axes = True
     r = 3
-    figure = [(-r, 0), (0, r), (r, 0), (0, -r)]
+    # смещение фигуры относитльно (0, 0)
+    dx = -1
+    dy = 1
+    figure = [(-r+dx, 0+dy), (0+dx, r+dy), (r+dx, 0+dy), (0+dx, -r+dy)]

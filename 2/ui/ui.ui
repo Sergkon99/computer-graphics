@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>692</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
       <x>10</x>
       <y>10</y>
       <width>600</width>
-      <height>500</height>
+      <height>600</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -148,13 +148,81 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>520</y>
+      <y>620</y>
       <width>221</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Сохранять промежуточные состояния</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="le_scale_x">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>270</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="le_scale_y">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>300</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_scale">
+    <property name="geometry">
+     <rect>
+      <x>624</x>
+      <y>330</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Приментить масштаб</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>270</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ox:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>300</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Oy:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
