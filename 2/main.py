@@ -18,10 +18,15 @@ class MyWin(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # self.figure = list(map(Point, DrawConst.figure))
-        self.figure = generate_figure()
+        # заполнение combo box
+        self.figures = ['фигура', 'квадрат', 'ромб', 'круг', 'звезда']
+        self.ui.cb_list_figure.addItems( self.figures)
+
+        figure = generate_figure()
+        self.figure = list(map(Point, figure))
         self.global_state = self.figure.copy()
         # print(self.figure)
+        self.drawCurrentFigure = self.drawMyFigure
 
         # размеры холста (ширрина и высота) в пикселях
         self.width = self.ui.canvas.width()
@@ -51,6 +56,7 @@ class MyWin(QMainWindow):
         # события ui элементов
         self.ui.le_move.inputRejected.connect(lambda : print('line edit event'))
         self.ui.cb_global_figure.stateChanged.connect(self.changeGlobal)
+        self.ui.cb_list_figure.currentIndexChanged.connect(self.changeFigure)
 
     def __init_canvas(self, w, h):
         """
@@ -71,6 +77,32 @@ class MyWin(QMainWindow):
         painter.end()
 
         self.setPixmap()
+
+    def changeFigure(self, idx):
+        """
+        Веберет текущую фигуру для рисования
+        """
+        figure = self.figures[idx]
+        if figure == 'фигура':
+            cur = generate_figure()
+            drawCurrentFigure = self.drawMyFigure
+        elif figure == 'квадрат':
+            cur = DrawConst.rect
+            drawCurrentFigure = self.drawFigureRect
+        elif figure == 'ромб':
+            cur = DrawConst.rhomb
+            drawCurrentFigure = self.drawFigureRect
+        elif figure == 'круг':
+            cur = DrawConst.circle
+            drawCurrentFigure = self.drawFigureCircle
+        elif figure == 'звезда':
+            cur = generate_star()
+            drawCurrentFigure = self.drawFigureStar
+
+        self.drawCurrentFigure = drawCurrentFigure
+        self.figure = list(map(Point, cur))
+        self.global_state = self.figure.copy()
+        self.drawFigure(self.figure)
 
     def changeGlobal(self):
         """
@@ -93,6 +125,7 @@ class MyWin(QMainWindow):
         self.ui.canvas.setPixmap(self.pixmap)
 
     def _get_figure(self):
+        """Вернёт сохраненное состояние фигуры или начально"""
         return self.global_state if self.state else self.figure
 
     def defaultPos(self):
@@ -195,12 +228,66 @@ class MyWin(QMainWindow):
             print('Unknown error: ' + str(ex))
 
     def rotateFromPoint(self):
-        x = float(self.ui.le_rotate_from_point_x.text())
-        y = float(self.ui.le_rotate_from_point_y.text())
-        angle = float(self.ui.le_rotate_angle.text())
-        p_rotate_from = partial(rotate_from, angle=angle, x=Point(x, y))
-        figure = list(map(p_rotate_from, self._get_figure()))
-        self.drawFigure(figure)
+        """
+        Метод для поворота фигуры относительно (x, y)
+        """
+        try:
+            x = float(self.ui.le_rotate_from_point_x.text())
+            y = float(self.ui.le_rotate_from_point_y.text())
+            angle = float(self.ui.le_rotate_angle.text())
+            p_rotate_from = partial(rotate_from, angle=angle, x=Point(x, y))
+            figure = list(map(p_rotate_from, self._get_figure()))
+            self.drawFigure(figure)
+        except ValueError as ex:
+            self.ui.le_rotate_from_point_x.setText('')
+            self.ui.le_rotate_from_point_y.setText('')
+            self.ui.le_rotate_angle.setText('')
+            print(str(ex))
+        except Exception as ex:
+            print('Unknown error: ' + str(ex))
+
+    def drawFigureRect(self, painter: QPainter, figure: List[Point]):
+        """
+        @breif Метод для рисования прямоугольников(квадрат, ромб и т.д.)
+        @param painter: объект QPainter для рисования
+        @param figure: список точек
+        """
+        self.drawLine(painter, figure[0], figure[1])
+        self.drawLine(painter, figure[1], figure[2])
+        self.drawLine(painter, figure[2], figure[3])
+        self.drawLine(painter, figure[3], figure[0])
+
+    def drawFigureCircle(self, painter: QPainter, figure: List[Point]):
+        """
+        @breif Метод для рисования окружностей
+        @param painter: объект QPainter для рисования
+        @param figure: список точек
+        """
+        self.drawEllipse(painter, figure)
+
+    def drawMyFigure(self, painter: QPainter, figure: List[Point]):
+        """
+        @breif Метод для рисования фигуры
+        @param painter: объект QPainter для рисования
+        @param figure: список точек
+        """
+        # Посление 4 точки задают прямые(так сгенерировано)
+        self.drawEllipse(painter, figure[:-4])
+        self.drawLine(painter, figure[-2], figure[-1])
+        self.drawLine(painter, figure[-4], figure[-3])
+
+    def drawFigureStar(self, painter: QPainter, figure: List[Point]):
+        """
+        @breif Метод для рисования звезды
+        @param painter: объект QPainter для рисования
+        @param figure: список точек
+        """
+        n = len(figure)
+        figure = list(map(self.to_qpoint, figure))
+        # шаг для вершин
+        m = n // 2
+        polygon: QPolygon = QPolygon([figure[i%n] for i in range(0, m*n, m)])
+        painter.drawPolygon(polygon)
 
     @log_method
     def drawFigure(self, figure: List[Point], event=None):
@@ -223,10 +310,11 @@ class MyWin(QMainWindow):
 
         painter.setPen(Qt.red)
 
-        # Посление 4 точки задают прямые(так сгенерировано)
-        self.drawEllipse(painter, figure[:-4])
-        self.drawLine(painter, figure[-2], figure[-1])
-        self.drawLine(painter, figure[-4], figure[-3])
+        try:
+            self.drawCurrentFigure(painter, figure)
+        except Exception as ex:
+            print('Exception occurred while drawing:' + str(ex))
+
 
         painter.end()
         self.setPixmap()
@@ -252,7 +340,7 @@ class MyWin(QMainWindow):
               !Все методы рисуют эллипс с осями, паралельными координатным осям
               Повернуть его без использования встроенных функций невозможно
         """
-        polygon: QPolygon = QPolygon(list(map(self.to_qpoint, figure[:-4])))
+        polygon: QPolygon = QPolygon(list(map(self.to_qpoint, figure)))
         painter.drawPolygon(polygon)
 
     def drawGrid(self, painter: QPainter):

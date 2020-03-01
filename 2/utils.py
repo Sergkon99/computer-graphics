@@ -10,6 +10,17 @@ def frange(start, stop, step):
         yield start
         start += step
 
+def generate_star():
+    r = DrawConst.r
+    dx = DrawConst.dx
+    dy = DrawConst.dy
+    figure = []
+    n = 9
+    a = pi/2
+    for k in range(n):
+        figure.append((r*cos(a+2*k*pi/n), r*sin(a+2*k*pi/n)))
+    return figure
+
 def generate_figure():
     r = DrawConst.r
     dx = DrawConst.dx
@@ -17,10 +28,10 @@ def generate_figure():
     figure = []
     # генерируем точки на окружности
     for t in frange(0, 2*pi, 0.01):
-        figure.append(Point(r*cos(t)+dx, r*sin(t)+dy))
+        figure.append((r*cos(t)+dx, r*sin(t)+dy))
     # задем прямые
-    figure.extend([Point(-r+dx, dy) ,Point(r+dx, dy)])
-    figure.extend([Point(dx, -r+dy) ,Point(dx, r+dy)])
+    figure.extend([(-r+dx, dy) ,(r+dx, dy)])
+    figure.extend([(dx, -r+dy) ,(dx, r+dy)])
 
     return figure
 
