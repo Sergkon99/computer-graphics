@@ -3,7 +3,6 @@ from ui.ui import *
 from PyQt5.QtCore import Qt, QPointF, QRect, QPoint
 from PyQt5.QtGui import QPainter, QPixmap, QColor, QMouseEvent, QPolygon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication
-# from PyQt5.QtCore.QEvent import QMouseEvent
 import random
 from utils import *
 from geometric import Point
@@ -60,9 +59,9 @@ class MyWin(QMainWindow):
 
     def __init_canvas(self, w, h):
         """
-        @breif Начальная инициализиция холста
-        @param w: ширина холста
-        @param h: высота холста
+        breif Начальная инициализиция холста
+        :param: w ширина холста
+        :param: h высота холста
         """
         self.pixmap = QPixmap(w, h)
         self.pixmap.fill(Qt.white)
@@ -80,7 +79,7 @@ class MyWin(QMainWindow):
 
     def changeFigure(self, idx):
         """
-        Веберет текущую фигуру для рисования
+        Выбрать фигуру для рисования
         """
         figure = self.figures[idx]
         if figure == 'фигура':
@@ -125,7 +124,9 @@ class MyWin(QMainWindow):
         self.ui.canvas.setPixmap(self.pixmap)
 
     def _get_figure(self):
-        """Вернёт сохраненное состояние фигуры или начально"""
+        """
+        Вернёт сохраненное состояние фигуры или начальное
+        """
         return self.global_state if self.state else self.figure
 
     def defaultPos(self):
@@ -138,8 +139,8 @@ class MyWin(QMainWindow):
 
     def drawMovedFigure(self, x, y):
         """
-        @breif Нарисовать смещенную фигуру
-        @param x, y на сколько сместить по каждой из осей в декартовых координатах
+        Нарисовать смещенную фигуру
+        :param: x, y на сколько сместить фигуру по каждой из осей (в декартовых координатах)
         """
         p_move_on = partial(move_on, x=x, y=y)
         figure = list(map(p_move_on, self._get_figure()))
@@ -173,7 +174,7 @@ class MyWin(QMainWindow):
 
     def reflectionX(self):
         """
-        Отразит фигуру относительно оси х
+        Отразить фигуру относительно оси х
         """
         reflection_x = partial(reflection, x=True, y=False)
         figure = list(map(reflection_x, self._get_figure()))
@@ -181,7 +182,7 @@ class MyWin(QMainWindow):
 
     def reflectionY(self):
         """
-        Отразит фигуру относительно оси y
+        Отразить фигуру относительно оси y
         """
         reflection_y = partial(reflection, x=False, y=True)
         figure = list(map(reflection_y, self._get_figure()))
@@ -189,7 +190,7 @@ class MyWin(QMainWindow):
 
     def reflectionXY(self):
         """
-        Отразит фигуру относительно прямой X=Y
+        Отразить фигуру относительно прямой X=Y
         """
         reflection_xy = partial(reflection, x=True, y=True)
         figure = list(map(reflection_xy, self._get_figure()))
@@ -248,9 +249,9 @@ class MyWin(QMainWindow):
 
     def drawFigureRect(self, painter: QPainter, figure: List[Point]):
         """
-        @breif Метод для рисования прямоугольников(квадрат, ромб и т.д.)
-        @param painter: объект QPainter для рисования
-        @param figure: список точек
+        Метод для рисования прямоугольников(квадрат, ромб и т.д.)
+        :param: painter объект QPainter для рисования
+        :param: figure список точек
         """
         self.drawLine(painter, figure[0], figure[1])
         self.drawLine(painter, figure[1], figure[2])
@@ -259,17 +260,17 @@ class MyWin(QMainWindow):
 
     def drawFigureCircle(self, painter: QPainter, figure: List[Point]):
         """
-        @breif Метод для рисования окружностей
-        @param painter: объект QPainter для рисования
-        @param figure: список точек
+        Метод для рисования окружностей
+        :param: painter объект QPainter для рисования
+        :param: figure список точек
         """
         self.drawEllipse(painter, figure)
 
     def drawMyFigure(self, painter: QPainter, figure: List[Point]):
         """
-        @breif Метод для рисования фигуры
-        @param painter: объект QPainter для рисования
-        @param figure: список точек
+        Метод для рисования фигуры
+        :param: painter объект QPainter для рисования
+        :param: figure список точек
         """
         # Посление 4 точки задают прямые(так сгенерировано)
         self.drawEllipse(painter, figure[:-4])
@@ -278,9 +279,9 @@ class MyWin(QMainWindow):
 
     def drawFigureStar(self, painter: QPainter, figure: List[Point]):
         """
-        @breif Метод для рисования звезды
-        @param painter: объект QPainter для рисования
-        @param figure: список точек
+        Метод для рисования звезды
+        :param: painter объект QPainter для рисования
+        :param: figure список точек
         """
         n = len(figure)
         figure = list(map(self.to_qpoint, figure))
@@ -292,8 +293,9 @@ class MyWin(QMainWindow):
     @log_method
     def drawFigure(self, figure: List[Point], event=None):
         """
-        @breif Основной метод для рисования фигуры
-        @param event: без него не работает декоратор, возможно про срабатывании события что-то передаются
+        Основной метод для рисования фигуры
+        :param: figure список точек
+        :param: event без него не работает декоратор, возможно про срабатывании события что-то передаются
         """
         # Сохраним глобальное состояние фигуры, если нужно
         if self.state:
@@ -322,9 +324,9 @@ class MyWin(QMainWindow):
     @log_method
     def drawLine(self, painter: QPainter, p1: Point, p2: Point):
         """
-        @breif Метод для рисования отрезка между точками
-        @param painter: объект QPainter для рисования
-        @param p1, p2: точки в декартовых координатах
+        Метод для рисования отрезка между точками
+        :param: painter объект QPainter для рисования
+        :param: p1, p2 точки в декартовых координатах
         """
         p1 = self.to_qpoint(p1)
         p2 = self.to_qpoint(p2)
@@ -333,20 +335,20 @@ class MyWin(QMainWindow):
     @log_method
     def drawEllipse(self, painter: QPainter, figure: List[Point]):
         """
-        @breif Метод для рисования эллипса
-        @param painter: объект QPainter для рисования
-        @param figure: точки, задающие зллипс
-        @info При поворте эллипса упираемся в то, что нельзя задать наклонный прямоугольник
-              !Все методы рисуют эллипс с осями, паралельными координатным осям
-              Повернуть его без использования встроенных функций невозможно
+        Метод для рисования эллипса
+        :param: painter объект QPainter для рисования
+        :param: figure точки, задающие зллипс
+        :info: При поворте эллипса упираемся в то, что нельзя задать наклонный прямоугольник
+               !Все методы рисуют эллипс с осями, паралельными координатным осям
+               Повернуть его без использования встроенных функций невозможно
         """
         polygon: QPolygon = QPolygon(list(map(self.to_qpoint, figure)))
         painter.drawPolygon(polygon)
 
     def drawGrid(self, painter: QPainter):
         """
-        @breif Метод для рисования сетки
-        @param painter: объект QPainter для рисования
+        Метод для рисования сетки
+        :param: painter объект QPainter для рисования
         """
         for dx in range(0, self.width, DrawConst.scaleX):
             painter.drawLine(dx, 0, dx, self.height)
@@ -356,8 +358,8 @@ class MyWin(QMainWindow):
 
     def drawAxes(self, painter: QPainter):
         """
-        @breif Метод для рисования осей с подписями
-        @param painter: объект QPainter для рисования
+        Метод для рисования осей с подписями
+        :param: painter объект QPainter для рисования
         """
         painter.drawLine(0, self.o_y, self.width, self.o_y)
         painter.drawLine(self.o_x, 0, self.o_x, self.height)
@@ -378,8 +380,8 @@ class MyWin(QMainWindow):
 
     def mousePressEvent(self, e: QMouseEvent):
         """
-        @breif Обработка события нажатия кнопки мыши
-        @param e: событие
+        Обработка события нажатия кнопки мыши
+        :param: e событие
         """
         t = e.pos()
         qp: QPoint = QPoint(t.x()-10, t.y()-10)
@@ -389,8 +391,8 @@ class MyWin(QMainWindow):
 
     def on_canvas(self, pos: QPoint):
         """
-        @breif Проверяет, лежит ли точка внутри холста
-        @param pos: позиция
+        Проверяет, лежит ли точка внутри холста
+        :param: pos позиция
         """
         rect: QRect = self.ui.canvas.geometry()
         x = pos.x()
@@ -401,8 +403,8 @@ class MyWin(QMainWindow):
 
     def to_decart(self, qpoint: QPoint):
         """
-        @breif Преобразования точки в декартовы координаты
-        @param qpoint: точка в координатах холста(пиксели)
+        Преобразования точки в декартовы координаты
+        :param: qpoint точка в координатах холста(пиксели)
         """
         x = (qpoint.x() - self.o_x) / DrawConst.scaleX
         y = (-qpoint.y() + self.o_y) / DrawConst.scaleY
@@ -410,8 +412,8 @@ class MyWin(QMainWindow):
 
     def to_qpoint(self, point: Point):
         """
-        @breif Преобразования точки в в координаты холста(пиксели)
-        @param point: точка в декартовых координатах
+        Преобразования точки в координаты холста(пиксели)
+        :param: point точка в декартовых координатах
         """
         x = point.x() * DrawConst.scaleX + self.o_x
         y = -point.y() * DrawConst.scaleY + self.o_y
