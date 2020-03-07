@@ -12,16 +12,16 @@ class Point:
 
     def __from_coord(self, x, y):
         """
-        @breif "Конструктор" из координат
-        @return Point
+        "Конструктор" из координат
+        :return: Point
         """
         self._x: float = x
         self._y: float = y
 
     def __from_pair(self, pair):
         """
-        @breif "Конструктор" из пары(кортеж), задающей координаты
-        @return Point
+        "Конструктор" из пары(кортеж), задающей координаты
+        :return: Point
         """
         self._x: float = pair[0]
         self._y: float = pair[1]
