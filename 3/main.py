@@ -48,8 +48,8 @@ class MyWin(QMainWindow):
         b: Point = Point(-3, -6)
         # self.drawLine(painter, a, b)
         # self.BresenhamLine(painter, a, b)
-        self.drawEllipse(painter, a, 4)
-        self.BresenhamCircle(painter, a, 4)
+        # self.drawEllipse(painter, a, 4)
+        # self.BresenhamCircle(painter, a, 4)
 
         painter.end()
 
@@ -148,10 +148,10 @@ class MyWin(QMainWindow):
                 x += 1
                 delta += 2*x + 1
                 continue
-            # error = 2*(delta + x) +1
+            error = 2*(delta + x) -1
             if ((delta > 0) and (error > 0)):
                 y -= 1
-                delta -= 2*y + 1
+                delta -= 2*y - 1
                 continue
             x += 1
             delta += 2*(x - y)
