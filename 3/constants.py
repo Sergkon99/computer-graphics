@@ -18,8 +18,8 @@ class DrawConst:
     ymin = -3
     ymax = 3
     # для холста
-    grid = False
-    axes = True
+    grid = 1
+    axes = 1
     # отступ для фигуры
     r = 3
     # смещение фигуры относитльно (0, 0)
