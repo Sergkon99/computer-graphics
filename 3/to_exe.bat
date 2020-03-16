@@ -1,0 +1,1 @@
+pyinstaller -F -w --clean --workpath ../../tmp/build --specpath ../../tmp main.py
