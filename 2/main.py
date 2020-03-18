@@ -1,5 +1,5 @@
 import sys
-from ui import *
+from ui.ui import *
 from PyQt5.QtCore import Qt, QPointF, QRect, QPoint
 from PyQt5.QtGui import QPainter, QPixmap, QColor, QMouseEvent, QPolygon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication
