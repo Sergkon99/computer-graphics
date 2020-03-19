@@ -132,30 +132,24 @@ class MyWin(QMainWindow):
             self.drawPoint(painter, Point(x, y))
 
     def BresenhamCircle(self, painter, a: Point, r: int):
-        disp_x, disp_y = a.x(), a.y()
-        x = 0
-        y = r
-        delta = 1 - 2*r
-        error = 0
-        while y >= 0:
-            self.drawPoint(painter, Point(disp_x + x, disp_y + y))
-            self.drawPoint(painter, Point(disp_x + x, disp_y - y))
-            self.drawPoint(painter, Point(disp_x - x, disp_y + y))
-            self.drawPoint(painter, Point(disp_x - x, disp_y - y))
-
-            error = 2 * (delta + y) - 1
-            if ((delta < 0) and (error <=0)):
-                x += 1
-                delta += 2*x + 1
-                continue
-            error = 2*(delta + x) -1
-            if ((delta > 0) and (error > 0)):
-                y -= 1
-                delta -= 2*y - 1
-                continue
-            x += 1
-            delta += 2*(x - y)
-            y -= 1
+        x, y = r, 0
+        error = 1 - x
+        while x >= y:
+            self.drawPoint(painter, Point(x + a.x(), y + a.y()))
+            self.drawPoint(painter, Point(y + a.x(), x + a.y()))
+            self.drawPoint(painter, Point(-x + a.x(), y + a.y()))
+            self.drawPoint(painter, Point(-y + a.x(), x + a.y()))
+            self.drawPoint(painter, Point(-x + a.x(), -y + a.y()))
+            self.drawPoint(painter, Point(-y + a.x(), -x + a.y()))
+            self.drawPoint(painter, Point(x + a.x(), -y + a.y()))
+            self.drawPoint(painter, Point(y + a.x(), -x + a.y()))
+            
+            y += 1
+            if error < 0:
+                error += 2*y + 1
+            else:
+                x -= 1
+                error += 2*(y - x + 1)
 
     def drawCanvas(self, painter: QPainter):
         pen = painter.pen()
