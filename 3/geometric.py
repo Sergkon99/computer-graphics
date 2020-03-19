@@ -1,3 +1,6 @@
+from __future__ import annotations
+from math import floor, ceil
+
 class Point:
     """
     Вспомогательный класс точки в декартовых коордмнатах
@@ -37,6 +40,12 @@ class Point:
 
     def setY(self, y):
         self._y = y
+
+    def int_coords(self):
+        return Point(int(round(self._x, 0)), int(round(self._y, 0)))
+
+    def __eq__(self: Point, other: Point):
+        return self._x == other._x and self._y == other._y
 
     def __str__(self):
         return f'({self._x} {self._y})'

@@ -10,7 +10,7 @@ from constants import DrawConst
 
 
 class MyWin(QMainWindow):
-    c = pyqtSignal()
+    c = pyqtSignal(Point)
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
@@ -23,13 +23,43 @@ class MyWin(QMainWindow):
         self.o_x = int(self.width * DrawConst.centerX)
         self.o_y = int(self.height * DrawConst.centerY)
 
-        self.c.connect(lambda: print('pyqtSignal'))
+        self.c.connect(lambda i: print('pyqtSignal', i))
 
-        self.c.emit()
+        self.c.emit(Point(0, 0))
         self._init_canvas(self.width, self.height)
+
+        self.points = []
 
         self.ui.pb_draw_line.clicked.connect(self.drawBresenhamLine)
         self.ui.pb_draw_circle.clicked.connect(self.drawBresenhamCircle)
+
+    def mousePressEvent(self, event: QMouseEvent):
+        pos: QPoint = event.pos()
+        rect: QRect = self.ui.canvas.geometry()
+        if event.button() == Qt.LeftButton:
+            if self.on_canvas(event.pos()):
+                decart_pos: Point = self.to_decart(QPoint(pos.x() - rect.x(), pos.y() - rect.y())).int_coords()
+                if decart_pos not in self.points:
+                    self.points.append(decart_pos)
+        elif event.button() == Qt.RightButton:
+            if self.on_canvas(event.pos()):
+                decart_pos: Point = self.to_decart(QPoint(pos.x() - rect.x(), pos.y() - rect.y())).int_coords()
+                if decart_pos in self.points:
+                    del_idx = self.points.index(decart_pos)
+                    del self.points[del_idx]
+
+        self.draw()
+
+    def on_canvas(self, pos: QPoint):
+        """
+        Проверяет, лежит ли точка внутри холста
+        :param: pos позиция
+        """
+        rect: QRect = self.ui.canvas.geometry()
+        x = pos.x()
+        y = pos.y()
+        return (x >= rect.x() and x <= rect.x() + rect.width() and
+                y >= rect.y() and y <= rect.y() + rect.height())
 
     def _init_canvas(self, w, h):
         """
@@ -50,6 +80,26 @@ class MyWin(QMainWindow):
         # self.BresenhamLine(painter, a, b)
         # self.drawEllipse(painter, a, 4)
         # self.BresenhamCircle(painter, a, 4)
+
+        painter.end()
+
+        self.setPixmap()
+
+    def draw(self):
+        self.clearCanvas()
+
+        painter = QPainter()
+        painter.begin(self.pixmap)
+
+        self.drawCanvas(painter)
+
+        if len(self.points) > 1:
+            for p1, p2 in zip(self.points[1:], self.points[:-1]):
+                self.drawLine(painter, p1, p2)
+                self.BresenhamLine(painter, p1, p2)
+
+        for point in self.points:
+            self.drawPoint(painter, point)
 
         painter.end()
 
@@ -99,13 +149,13 @@ class MyWin(QMainWindow):
         x2, y2 = b.x(), b.y()
         dx = x2 - x1
         dy = y2 - y1
-        
+
         sign_x = 1 if dx>0 else -1 if dx<0 else 0
         sign_y = 1 if dy>0 else -1 if dy<0 else 0
-        
+
         if dx < 0: dx = -dx
         if dy < 0: dy = -dy
-        
+
         if dx > dy:
             pdx, pdy = sign_x, 0
             es, el = dy, dx
@@ -117,7 +167,7 @@ class MyWin(QMainWindow):
         
         error, t = el, 0
         
-        self.drawPoint(painter, Point(x, y))
+        self.drawPoint(painter, Point(x, y), Qt.red)
         
         while t < el:
             error -= 2*es
@@ -129,7 +179,7 @@ class MyWin(QMainWindow):
                 x += pdx
                 y += pdy
             t += 1
-            self.drawPoint(painter, Point(x, y))
+            self.drawPoint(painter, Point(x, y), Qt.red)
 
     def BresenhamCircle(self, painter, a: Point, r: int):
         x, y = r, 0
@@ -201,9 +251,9 @@ class MyWin(QMainWindow):
     def drawLine(self, painter: QPainter, a: Point, b: Point):
         painter.drawLine(self.to_qpoint(a), self.to_qpoint(b))
 
-    def drawPoint(self, painter: QPainter, a: Point):
-        painter.setPen(Qt.red)
-        painter.setBrush(Qt.red)
+    def drawPoint(self, painter: QPainter, a: Point, color: QColor=Qt.black):
+        painter.setPen(color)
+        painter.setBrush(color)
         painter.drawEllipse(self.to_qpoint(a), 2, 2)
         # painter.drawPoint(self.to_qpoint(a))
         painter.setBrush(Qt.NoBrush)
