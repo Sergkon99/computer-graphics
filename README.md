@@ -5,6 +5,7 @@
 Запуск:
 ```
 pip install -r requirements.txt
+cd 1
 python3 main.py
 ```
 Конвертирование ui ресурса в python код:
